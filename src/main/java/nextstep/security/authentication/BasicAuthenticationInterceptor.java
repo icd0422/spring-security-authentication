@@ -1,7 +1,5 @@
-package nextstep.app.ui;
+package nextstep.security.authentication;
 
-import nextstep.app.domain.Member;
-import nextstep.app.domain.MemberRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class BasicAuthenticationInterceptor implements HandlerInterceptor {
 
-    private final MemberRepository memberRepository;
+    private final UserDetailsService userDetailsService;
 
-    public BasicAuthenticationInterceptor(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public BasicAuthenticationInterceptor(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -45,9 +43,9 @@ public class BasicAuthenticationInterceptor implements HandlerInterceptor {
         String email = emailAndPassword[0];
         String password = emailAndPassword[1];
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(AuthenticationException::new);
-
-        member.checkPassword(password);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        if (!userDetails.getPassword().equals(password)) {
+            throw new AuthenticationException();
+        }
     }
-
 }

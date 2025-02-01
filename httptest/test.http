@@ -1,5 +1,5 @@
 ### 로그인
-POST {{security-authentication-api}}/login
+POST {{security-authentication-api}}/login?username=a@a.com&password=password
 Accept: application/json
 Content-Type: application/json
 

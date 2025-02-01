@@ -1,6 +1,6 @@
 package nextstep.app.domain;
 
-import nextstep.app.ui.AuthenticationException;
+import nextstep.security.authentication.AuthenticationException;
 
 public class Member {
     private final String email;
